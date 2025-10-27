@@ -1,0 +1,2 @@
+- Existing templates that access the file metadata attributes need to be
+  updated to use the new normalized version of the attribute.

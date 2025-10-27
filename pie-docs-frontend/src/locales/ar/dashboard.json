@@ -1,0 +1,286 @@
+{
+  "title": "لوحة التحكم",
+  "welcome": "مرحباً بك في وثائق الفطيرة. إليك نظرة عامة على نظام إدارة المستندات الخاص بك.",
+  "uploadDocument": "رفع مستند",
+  "widgets": {
+    "statistics": {
+      "title": "إحصائيات المستندات",
+      "totalDocuments": "إجمالي المستندات",
+      "processing": "قيد المعالجة",
+      "completedToday": "تم إنجازها اليوم"
+    },
+    "recentActivity": {
+      "title": "النشاط الأخير",
+      "documentUploaded": "تم رفع المستند: {{filename}}",
+      "ocrCompleted": "تمت معالجة التعرف على النص",
+      "workflowPending": "في انتظار موافقة سير العمل",
+      "searchIndexUpdated": "تم تحديث فهرس البحث"
+    },
+    "quickActions": {
+      "title": "الإجراءات السريعة",
+      "upload": "رفع",
+      "search": "بحث",
+      "reports": "التقارير",
+      "settings": "الإعدادات"
+    },
+    "systemOverview": {
+      "title": "نظرة عامة على النظام",
+      "uptime": "وقت التشغيل",
+      "storageUsed": "التخزين المستخدم",
+      "activeUsers": "المستخدمون النشطون",
+      "avgResponse": "متوسط الاستجابة"
+    },
+    "personalDocuments": {
+      "title": "مستنداتي",
+      "recent": "الأحدث",
+      "bookmarked": "المحفوظة",
+      "shared": "المشتركة"
+    },
+    "personalTasks": {
+      "title": "مهامي",
+      "all": "الكل",
+      "pending": "في الانتظار",
+      "inProgress": "قيد التنفيذ",
+      "overdue": "متأخرة"
+    },
+    "folderTree": {
+      "title": "التنقل في المجلدات",
+      "search": "البحث في المجلدات...",
+      "newFolder": "مجلد جديد",
+      "upload": "رفع",
+      "quickAccess": "الوصول السريع"
+    }
+  },
+  "accessibility": {
+    "dragToReorder": "اسحب لإعادة ترتيب الويدجت",
+    "resizeToSmall": "تغيير الحجم إلى صغير",
+    "resizeToMedium": "تغيير الحجم إلى متوسط",
+    "resizeToLarge": "تغيير الحجم إلى كبير",
+    "resizeToWide": "تغيير الحجم إلى عريض"
+  },
+  "enhanced": {
+    "title": "لوحة التحكم المتقدمة",
+    "subtitle": "رؤى فورية وإدارة شاملة للمستندات",
+    "loading": "جارٍ تحميل لوحة التحكم المتقدمة...",
+    "customize": "تخصيص",
+    "done": "تم",
+    "customizeTitle": "تخصيص لوحة التحكم",
+    "timeRange": "النطاق الزمني",
+    "timeRanges": {
+      "7d": "7 أيام",
+      "30d": "30 يوماً",
+      "90d": "90 يوماً"
+    },
+    "uploadDocument": "رفع مستند",
+    "statistics": {
+      "totalDocuments": "إجمالي المستندات",
+      "processingQueue": "قائمة المعالجة",
+      "activeWorkflows": "سير العمل النشط",
+      "systemHealth": "صحة النظام",
+      "storageUsed": "التخزين المستخدم",
+      "activeUsers": "المستخدمون النشطون"
+    },
+    "widgets": {
+      "advancedAnalytics": "التحليلات المتقدمة",
+      "documentInsights": "رؤى المستندات",
+      "systemPerformance": "أداء النظام",
+      "workflowStatus": "حالة سير العمل",
+      "userActivityHeatmap": "خريطة نشاط المستخدمين",
+      "notificationCenter": "الإشعارات",
+      "operationalInsights": "الرؤى التشغيلية"
+    },
+    "performance": {
+      "cpuUsage": "استخدام المعالج",
+      "memoryUsage": "استخدام الذاكرة",
+      "diskIO": "إدخال/إخراج القرص",
+      "network": "الشبكة",
+      "responseTime": "وقت الاستجابة",
+      "activeUsers": "المستخدمون النشطون",
+      "systemHealth": "صحة النظام",
+      "servicesHealthy": "خدمات سليمة",
+      "live": "مباشر",
+      "performanceTrend": "اتجاه الأداء",
+      "recentAlerts": "التنبيهات الأخيرة",
+      "healthy": "سليم",
+      "warning": "تحذير",
+      "critical": "حرج",
+      "cpu": "المعالج",
+      "memory": "الذاكرة"
+    },
+    "workflow": {
+      "running": "قيد التشغيل",
+      "queued": "في الانتظار",
+      "done": "مكتمل",
+      "failed": "فشل",
+      "all": "الكل",
+      "completed": "مكتمل",
+      "paused": "متوقف",
+      "steps": {
+        "documentValidation": "التحقق من المستند",
+        "ocrProcessing": "معالجة التعرف على النص",
+        "contentAnalysis": "تحليل المحتوى",
+        "indexUpdate": "تحديث الفهرس"
+      },
+      "status": {
+        "pending": "في الانتظار",
+        "active": "نشط",
+        "completed": "مكتمل",
+        "failed": "فشل",
+        "skipped": "تم التخطي"
+      },
+      "priority": {
+        "low": "منخفض",
+        "medium": "متوسط",
+        "high": "عالي",
+        "critical": "حرج"
+      },
+      "types": {
+        "documentProcessing": "معالجة المستندات",
+        "ocr": "التعرف على النص",
+        "approval": "الموافقة",
+        "archive": "الأرشيف",
+        "custom": "مخصص"
+      },
+      "errors": {
+        "processingTimeout": "انتهت مهلة المعالجة - المستند كبير جداً"
+      }
+    },
+    "insights": {
+      "categories": {
+        "all": "الكل",
+        "processing": "المعالجة",
+        "storage": "التخزين",
+        "security": "الأمان",
+        "usage": "الاستخدام",
+        "performance": "الأداء"
+      },
+      "types": {
+        "trend": "اتجاه",
+        "anomaly": "شذوذ",
+        "recommendation": "توصية",
+        "achievement": "إنجاز"
+      },
+      "insights": {
+        "pdfProcessingSpike": {
+          "title": "ارتفاع في معالجة PDF",
+          "description": "زادت معالجة مستندات PDF بنسبة 34% هذا الأسبوع",
+          "action": "مراقبة سعة المعالجة"
+        },
+        "highFailureRate": {
+          "title": "معدل فشل عالي مكتشف",
+          "description": "معدل فشل التعرف على النص للمستندات الممسوحة أعلى من الطبيعي",
+          "action": "مراجعة إعدادات التعرف على النص"
+        },
+        "storageOptimization": {
+          "title": "تحسين التخزين",
+          "description": "فكر في أرشفة المستندات الأقدم من سنتين",
+          "action": "إعداد سياسة الأرشفة"
+        },
+        "securityAlert": {
+          "title": "تحديث أمني متاح",
+          "description": "تصحيحات أمنية جديدة متاحة لتشفير المستندات",
+          "action": "جدولة نافذة الصيانة"
+        },
+        "performanceImprovement": {
+          "title": "تحسن سرعة المعالجة",
+          "description": "انخفض متوسط وقت المعالجة بنسبة 15% بعد التحسين",
+          "action": "توثيق تقنيات التحسين"
+        }
+      },
+      "formatLabels": {
+        "pdf": "PDF",
+        "docx": "وورد",
+        "xlsx": "إكسل",
+        "png": "صورة",
+        "txt": "نص"
+      }
+    }
+  },
+  "modern": {
+    "title": "نظرة عامة على التحليلات",
+    "subtitle": "رؤى فورية وتوصيات ذكية",
+    "timeRange": {
+      "today": "اليوم",
+      "week": "أسبوع",
+      "month": "شهر",
+      "quarter": "ربع سنة"
+    },
+    "kpi": {
+      "totalDocuments": "إجمالي المستندات",
+      "today": "اليوم",
+      "activeUsers": "المستخدمون النشطون",
+      "engagement": "التفاعل",
+      "systemUptime": "وقت تشغيل النظام",
+      "excellent": "ممتاز",
+      "msAvgResponse": "مللي ثانية متوسط الاستجابة",
+      "workflowsThisWeek": "سير العمل هذا الأسبوع",
+      "pendingTasks": "مهمة معلقة"
+    },
+    "quickActions": {
+      "title": "الإجراءات السريعة",
+      "upload": {
+        "title": "رفع مستند",
+        "description": "إضافة مستندات جديدة مع التعرف الضوئي",
+        "badge": "جديد"
+      },
+      "search": {
+        "title": "البحث بالذكاء الاصطناعي",
+        "description": "البحث باللغة الطبيعية"
+      },
+      "workflow": {
+        "title": "إنشاء سير عمل",
+        "description": "أتمتة عمليات المستندات"
+      },
+      "barcode": {
+        "title": "إنشاء رمز شريطي",
+        "description": "إنشاء ملصقات الأصول"
+      },
+      "reports": {
+        "title": "عرض التقارير",
+        "description": "التحليلات والرؤى"
+      },
+      "tasks": {
+        "title": "مهامي",
+        "description": "عرض الموافقات المعلقة"
+      }
+    },
+    "widgets": {
+      "documentInsights": "رؤى المستندات",
+      "workflowStatus": "حالة سير العمل",
+      "documentInsightsWidget": {
+        "totalDocs": "إجمالي المستندات",
+        "inQueue": "في الانتظار",
+        "avgTime": "متوسط الوقت",
+        "storage": "التخزين",
+        "popularFormats": "الصيغ الشائعة"
+      },
+      "notifications": {
+        "title": "الإشعارات",
+        "showAll": "عرض الكل",
+        "unreadOnly": "غير المقروءة فقط",
+        "markAllRead": "تحديد الكل كمقروء",
+        "viewAll": "عرض كل الإشعارات",
+        "noUnread": "لا توجد إشعارات غير مقروءة",
+        "noNotifications": "لا توجد إشعارات",
+        "categories": {
+          "all": "الكل",
+          "documents": "المستندات",
+          "workflows": "سير العمل",
+          "system": "النظام",
+          "security": "الأمان",
+          "approvals": "الموافقات",
+          "users": "المستخدمون"
+        }
+      },
+      "workflow": {
+        "documentsCount": "{{count}} مستند"
+      }
+    },
+    "departments": {
+      "title": "أداء الأقسام",
+      "docs": "مستند",
+      "activeUsers": "مستخدم نشط",
+      "efficiency": "الكفاءة"
+    }
+  }
+}

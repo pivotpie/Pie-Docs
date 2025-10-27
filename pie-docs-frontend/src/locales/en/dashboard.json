@@ -1,0 +1,286 @@
+{
+  "title": "Dashboard",
+  "welcome": "Welcome to PIE DOCS. Here's an overview of your document management system.",
+  "uploadDocument": "Upload Document",
+  "widgets": {
+    "statistics": {
+      "title": "Document Statistics",
+      "totalDocuments": "Total Documents",
+      "processing": "Processing",
+      "completedToday": "Completed Today"
+    },
+    "recentActivity": {
+      "title": "Recent Activity",
+      "documentUploaded": "Document uploaded: {{filename}}",
+      "ocrCompleted": "OCR processing completed",
+      "workflowPending": "Workflow approval pending",
+      "searchIndexUpdated": "Search index updated"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "upload": "Upload",
+      "search": "Search",
+      "reports": "Reports",
+      "settings": "Settings"
+    },
+    "systemOverview": {
+      "title": "System Overview",
+      "uptime": "Uptime",
+      "storageUsed": "Storage Used",
+      "activeUsers": "Active Users",
+      "avgResponse": "Avg Response"
+    },
+    "personalDocuments": {
+      "title": "My Documents",
+      "recent": "Recent",
+      "bookmarked": "Bookmarked",
+      "shared": "Shared"
+    },
+    "personalTasks": {
+      "title": "My Tasks",
+      "all": "All",
+      "pending": "Pending",
+      "inProgress": "In Progress",
+      "overdue": "Overdue"
+    },
+    "folderTree": {
+      "title": "Folder Navigation",
+      "search": "Search folders...",
+      "newFolder": "New Folder",
+      "upload": "Upload",
+      "quickAccess": "Quick Access"
+    }
+  },
+  "accessibility": {
+    "dragToReorder": "Drag to reorder widget",
+    "resizeToSmall": "Resize to small",
+    "resizeToMedium": "Resize to medium",
+    "resizeToLarge": "Resize to large",
+    "resizeToWide": "Resize to wide"
+  },
+  "enhanced": {
+    "title": "Enhanced Dashboard",
+    "subtitle": "Real-time insights and comprehensive document management",
+    "loading": "Loading your enhanced dashboard...",
+    "customize": "Customize",
+    "done": "Done",
+    "customizeTitle": "Customize Dashboard",
+    "timeRange": "Time Range",
+    "timeRanges": {
+      "7d": "7 Days",
+      "30d": "30 Days",
+      "90d": "90 Days"
+    },
+    "uploadDocument": "Upload Document",
+    "statistics": {
+      "totalDocuments": "Total Documents",
+      "processingQueue": "Processing Queue",
+      "activeWorkflows": "Active Workflows",
+      "systemHealth": "System Health",
+      "storageUsed": "Storage Used",
+      "activeUsers": "Active Users"
+    },
+    "widgets": {
+      "advancedAnalytics": "Advanced Analytics",
+      "documentInsights": "Document Insights",
+      "systemPerformance": "System Performance",
+      "workflowStatus": "Workflow Status",
+      "userActivityHeatmap": "User Activity Heatmap",
+      "notificationCenter": "Notifications",
+      "operationalInsights": "Operational Insights"
+    },
+    "performance": {
+      "cpuUsage": "CPU Usage",
+      "memoryUsage": "Memory Usage",
+      "diskIO": "Disk I/O",
+      "network": "Network",
+      "responseTime": "Response Time",
+      "activeUsers": "Active Users",
+      "systemHealth": "System Health",
+      "servicesHealthy": "services healthy",
+      "live": "Live",
+      "performanceTrend": "Performance Trend",
+      "recentAlerts": "Recent Alerts",
+      "healthy": "Healthy",
+      "warning": "Warning",
+      "critical": "Critical",
+      "cpu": "CPU",
+      "memory": "Memory"
+    },
+    "workflow": {
+      "running": "Running",
+      "queued": "Queued",
+      "done": "Done",
+      "failed": "Failed",
+      "all": "All",
+      "completed": "Completed",
+      "paused": "Paused",
+      "steps": {
+        "documentValidation": "Document Validation",
+        "ocrProcessing": "OCR Processing",
+        "contentAnalysis": "Content Analysis",
+        "indexUpdate": "Index Update"
+      },
+      "status": {
+        "pending": "Pending",
+        "active": "Active",
+        "completed": "Completed",
+        "failed": "Failed",
+        "skipped": "Skipped"
+      },
+      "priority": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "critical": "Critical"
+      },
+      "types": {
+        "documentProcessing": "Document Processing",
+        "ocr": "OCR",
+        "approval": "Approval",
+        "archive": "Archive",
+        "custom": "Custom"
+      },
+      "errors": {
+        "processingTimeout": "Processing timeout - document too large"
+      }
+    },
+    "insights": {
+      "categories": {
+        "all": "All",
+        "processing": "Processing",
+        "storage": "Storage",
+        "security": "Security",
+        "usage": "Usage",
+        "performance": "Performance"
+      },
+      "types": {
+        "trend": "Trend",
+        "anomaly": "Anomaly",
+        "recommendation": "Recommendation",
+        "achievement": "Achievement"
+      },
+      "insights": {
+        "pdfProcessingSpike": {
+          "title": "PDF Processing Spike",
+          "description": "PDF document processing increased by 34% this week",
+          "action": "Monitor processing capacity"
+        },
+        "highFailureRate": {
+          "title": "High Failure Rate Detected",
+          "description": "OCR failure rate for scanned documents is above normal",
+          "action": "Review OCR configuration"
+        },
+        "storageOptimization": {
+          "title": "Storage Optimization",
+          "description": "Consider archiving documents older than 2 years",
+          "action": "Set up archival policy"
+        },
+        "securityAlert": {
+          "title": "Security Update Available",
+          "description": "New security patches available for document encryption",
+          "action": "Schedule maintenance window"
+        },
+        "performanceImprovement": {
+          "title": "Processing Speed Improved",
+          "description": "Average processing time reduced by 15% after optimization",
+          "action": "Document optimization techniques"
+        }
+      },
+      "formatLabels": {
+        "pdf": "PDF",
+        "docx": "Word",
+        "xlsx": "Excel",
+        "png": "Image",
+        "txt": "Text"
+      }
+    }
+  },
+  "modern": {
+    "title": "Analytics Overview",
+    "subtitle": "Real-time insights and intelligent recommendations",
+    "timeRange": {
+      "today": "Today",
+      "week": "Week",
+      "month": "Month",
+      "quarter": "Quarter"
+    },
+    "kpi": {
+      "totalDocuments": "Total Documents",
+      "today": "today",
+      "activeUsers": "Active Users",
+      "engagement": "engagement",
+      "systemUptime": "System Uptime",
+      "excellent": "Excellent",
+      "msAvgResponse": "ms avg response",
+      "workflowsThisWeek": "Workflows This Week",
+      "pendingTasks": "pending tasks"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "upload": {
+        "title": "Upload Document",
+        "description": "Add new documents with OCR",
+        "badge": "New"
+      },
+      "search": {
+        "title": "AI Search",
+        "description": "Natural language search"
+      },
+      "workflow": {
+        "title": "Create Workflow",
+        "description": "Automate document processes"
+      },
+      "barcode": {
+        "title": "Generate Barcode",
+        "description": "Create asset labels"
+      },
+      "reports": {
+        "title": "View Reports",
+        "description": "Analytics & insights"
+      },
+      "tasks": {
+        "title": "My Tasks",
+        "description": "View pending approvals"
+      }
+    },
+    "widgets": {
+      "documentInsights": "Document Insights",
+      "workflowStatus": "Workflow Status",
+      "documentInsightsWidget": {
+        "totalDocs": "Total Docs",
+        "inQueue": "In Queue",
+        "avgTime": "Avg Time",
+        "storage": "Storage",
+        "popularFormats": "Popular Formats"
+      },
+      "notifications": {
+        "title": "Notifications",
+        "showAll": "Show All",
+        "unreadOnly": "Unread Only",
+        "markAllRead": "Mark All Read",
+        "viewAll": "View all notifications",
+        "noUnread": "No unread notifications",
+        "noNotifications": "No notifications",
+        "categories": {
+          "all": "All",
+          "documents": "Documents",
+          "workflows": "Workflows",
+          "system": "System",
+          "security": "Security",
+          "approvals": "Approvals",
+          "users": "Users"
+        }
+      },
+      "workflow": {
+        "documentsCount": "{{count}} documents"
+      }
+    },
+    "departments": {
+      "title": "Department Performance",
+      "docs": "docs",
+      "activeUsers": "active users",
+      "efficiency": "efficiency"
+    }
+  }
+}

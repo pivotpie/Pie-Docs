@@ -1,0 +1,53 @@
+{
+  "language": "اللغة",
+  "english": "English",
+  "arabic": "العربية",
+  "loading": "جارٍ التحميل...",
+  "error": "خطأ",
+  "success": "نجح",
+  "cancel": "إلغاء",
+  "confirm": "تأكيد",
+  "save": "حفظ",
+  "delete": "حذف",
+  "edit": "تعديل",
+  "add": "إضافة",
+  "close": "إغلاق",
+  "retry": "إعادة المحاولة",
+  "back": "رجوع",
+  "next": "التالي",
+  "previous": "السابق",
+  "of": "من",
+  "submit": "إرسال",
+  "reset": "إعادة تعيين",
+  "search": "بحث",
+  "filter": "تصفية",
+  "sort": "ترتيب",
+  "actions": "الإجراءات",
+  "settings": "الإعدادات",
+  "profile": "الملف الشخصي",
+  "logout": "تسجيل الخروج",
+  "login": "تسجيل الدخول",
+  "home": "الرئيسية",
+  "dashboard": "لوحة التحكم",
+  "navigation": {
+    "main": "التنقل الرئيسي",
+    "skipToContent": "انتقل إلى المحتوى الرئيسي"
+  },
+  "header": {
+    "appName": "وثائق الفطيرة",
+    "openSidebar": "فتح الشريط الجانبي",
+    "closeSidebar": "إغلاق الشريط الجانبي",
+    "user": "المستخدم",
+    "role": "الدور",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات",
+    "logout": "تسجيل الخروج"
+  },
+  "errors": {
+    "pageNotFound": "الصفحة غير موجودة",
+    "unauthorized": "وصول غير مصرح",
+    "forbidden": "الوصول ممنوع",
+    "serverError": "خطأ داخلي في الخادم",
+    "networkError": "خطأ في اتصال الشبكة"
+  }
+}

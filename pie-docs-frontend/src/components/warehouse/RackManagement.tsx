@@ -1,0 +1,678 @@
+import React, { useState, useEffect } from 'react';
+import { warehouseServices } from '@/services/warehouseService';
+import type { Rack, RackCreate, RackUpdate, Shelf } from '@/types/warehouse';
+
+interface RackManagementProps {
+  selectedShelf?: Shelf;
+  onRackSelected?: (rack: Rack) => void;
+}
+
+export const RackManagement: React.FC<RackManagementProps> = ({
+  selectedShelf,
+  onRackSelected
+}) => {
+  const [racks, setRacks] = useState<Rack[]>([]);
+  const [shelves, setShelves] = useState<Shelf[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editingRack, setEditingRack] = useState<Rack | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [availableFilter, setAvailableFilter] = useState<string>('all');
+
+  // Form state
+  const [formData, setFormData] = useState<RackCreate>({
+    shelf_id: selectedShelf?.id || '',
+    code: '',
+    barcode: '',
+    name: '',
+    description: '',
+    rack_type: 'box',
+    dimensions: {
+      width: 40,
+      depth: 30,
+      height: 25
+    },
+    weight_capacity: 50,
+    max_documents: 50,
+    position: 'A1',
+    customer_id: undefined,
+    assignment_type: 'general'
+  });
+
+  useEffect(() => {
+    loadShelves();
+    loadRacks();
+  }, [selectedShelf, statusFilter, availableFilter]);
+
+  const loadShelves = async () => {
+    try {
+      const data = await warehouseServices.shelves.list({ status: 'active' });
+      setShelves(data);
+    } catch (error) {
+      console.error('Failed to load shelves:', error);
+    }
+  };
+
+  const loadRacks = async () => {
+    try {
+      setLoading(true);
+      const filters: any = {};
+      if (selectedShelf) {
+        filters.shelf_id = selectedShelf.id;
+      }
+      if (statusFilter !== 'all') {
+        filters.status = statusFilter;
+      }
+      if (availableFilter === 'available') {
+        filters.available = true;
+      } else if (availableFilter === 'full') {
+        filters.available = false;
+      }
+      const data = await warehouseServices.racks.list(filters);
+      setRacks(data);
+    } catch (error) {
+      console.error('Failed to load racks:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.barcode || formData.barcode.trim() === '') {
+      alert('Barcode is required for racks');
+      return;
+    }
+
+    try {
+      // TODO: Get from auth context - using a valid UUID format for now
+      const userId = '00000000-0000-0000-0000-000000000001';
+
+      if (editingRack) {
+        const updated = await warehouseServices.racks.update(
+          editingRack.id,
+          formData as RackUpdate,
+          userId
+        );
+        setRacks(prev => prev.map(r => r.id === updated.id ? updated : r));
+      } else {
+        const newRack = await warehouseServices.racks.create(formData, userId);
+        setRacks(prev => [...prev, newRack]);
+      }
+
+      resetForm();
+      setShowForm(false);
+    } catch (error: any) {
+      console.error('Failed to save rack:', error);
+      // Handle specific error cases
+      if (error.response?.status === 409) {
+        alert(error.response.data.detail || 'Rack code or barcode already exists');
+      } else if (error.response?.data?.detail) {
+        alert(error.response.data.detail);
+      } else {
+        alert(error.message || 'Failed to save rack');
+      }
+    }
+  };
+
+  const handleEdit = (rack: Rack) => {
+    setEditingRack(rack);
+    setFormData({
+      shelf_id: rack.shelf_id,
+      code: rack.code,
+      barcode: rack.barcode,
+      name: rack.name,
+      description: rack.description,
+      rack_type: rack.rack_type,
+      dimensions: rack.dimensions,
+      weight_capacity: rack.weight_capacity,
+      max_documents: rack.max_documents,
+      position: rack.position,
+      customer_id: rack.customer_id,
+      assignment_type: rack.assignment_type
+    });
+    setShowForm(true);
+  };
+
+  const resetForm = () => {
+    setFormData({
+      shelf_id: selectedShelf?.id || '',
+      code: '',
+      barcode: '',
+      name: '',
+      description: '',
+      rack_type: 'box',
+      dimensions: {
+        width: 40,
+        depth: 30,
+        height: 25
+      },
+      weight_capacity: 50,
+      max_documents: 50,
+      position: 'A1',
+      customer_id: undefined,
+      assignment_type: 'general'
+    });
+    setEditingRack(null);
+  };
+
+  const generateBarcode = async () => {
+    try {
+      const barcode = await warehouseServices.barcode.generateBarcode('rack', 'RK');
+      setFormData({ ...formData, barcode });
+    } catch (error) {
+      console.error('Failed to generate barcode:', error);
+    }
+  };
+
+  const filteredRacks = racks.filter(rack =>
+    rack.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    rack.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    rack.barcode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    rack.position.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const getCapacityColor = (rack: Rack) => {
+    const utilizationPercent = (rack.current_documents / rack.max_documents) * 100;
+    if (utilizationPercent >= 100) return 'text-red-300';
+    if (utilizationPercent >= 90) return 'text-orange-300';
+    if (utilizationPercent >= 70) return 'text-yellow-300';
+    return 'text-green-300';
+  };
+
+  const getCapacityBadge = (rack: Rack) => {
+    const available = rack.max_documents - rack.current_documents;
+    if (available === 0) {
+      return <span className="inline-flex px-2 py-0.5 text-xs font-semibold rounded bg-red-500/30 text-red-200 border border-red-400/50">Full</span>;
+    } else if (available <= 5) {
+      return <span className="inline-flex px-2 py-0.5 text-xs font-semibold rounded bg-orange-500/30 text-orange-200 border border-orange-400/50">Low</span>;
+    } else {
+      return <span className="inline-flex px-2 py-0.5 text-xs font-semibold rounded bg-green-500/30 text-green-200 border border-green-400/50">Available</span>;
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header and Actions */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex-1">
+          <input
+            type="text"
+            placeholder="Search racks by name, code, barcode, or position..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md placeholder-gray-300"
+          />
+        </div>
+
+        <div className="flex items-center gap-3">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md"
+          >
+            <option className="bg-gray-800" value="all">All Status</option>
+            <option className="bg-gray-800" value="active">Active</option>
+            <option className="bg-gray-800" value="inactive">Inactive</option>
+            <option className="bg-gray-800" value="maintenance">Maintenance</option>
+          </select>
+
+          <select
+            value={availableFilter}
+            onChange={(e) => setAvailableFilter(e.target.value)}
+            className="px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md"
+          >
+            <option className="bg-gray-800" value="all">All Capacity</option>
+            <option className="bg-gray-800" value="available">Available</option>
+            <option className="bg-gray-800" value="full">Full</option>
+          </select>
+
+          <button
+            onClick={() => {
+              resetForm();
+              setShowForm(true);
+            }}
+            className="inline-flex items-center px-4 py-2 bg-blue-500/30 backdrop-blur-sm text-white border border-blue-400/50 rounded-md hover:bg-blue-500/50 transition-colors whitespace-nowrap"
+          >
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Add Rack
+          </button>
+        </div>
+      </div>
+
+      {/* Form Modal */}
+      {showForm && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="px-6 py-4 border-b border-white/20 flex justify-between items-center sticky top-0 bg-purple-900/95 backdrop-blur-md z-10">
+              <h3 className="text-lg font-semibold text-white">
+                {editingRack ? 'Edit Rack' : 'Add New Rack'}
+              </h3>
+              <button
+                onClick={() => {
+                  setShowForm(false);
+                  resetForm();
+                }}
+                className="text-gray-300 hover:text-white"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+              {/* Shelf Selection */}
+              <div>
+                <label className="block text-sm font-medium text-white mb-1">
+                  Shelf *
+                </label>
+                <select
+                  required
+                  value={formData.shelf_id}
+                  onChange={(e) => setFormData({ ...formData, shelf_id: e.target.value })}
+                  className="w-full px-3 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md placeholder-gray-300"
+                >
+                  <option className="bg-gray-800 text-white" value="">Select a shelf...</option>
+                  {shelves.map(shelf => (
+                    <option key={shelf.id} value={shelf.id} className="bg-gray-800 text-white">
+                      {shelf.name} ({shelf.code})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Basic Information */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-white mb-1">
+                    Rack Code *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.code}
+                    onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                    className="w-full px-3 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md placeholder-gray-300"
+                    placeholder="RK-A-001"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-1">
+                    Barcode * <span className="text-red-400">(Required)</span>
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      required
+                      value={formData.barcode}
+                      onChange={(e) => setFormData({ ...formData, barcode: e.target.value })}
+                      className="flex-1 px-3 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md placeholder-gray-300"
+                      placeholder="RK-12345678-ABCD"
+                    />
+                    <button
+                      type="button"
+                      onClick={generateBarcode}
+                      className="px-3 py-2 bg-green-500/20 text-green-200 border border-green-400/50 rounded-md hover:bg-green-500/30 transition-colors text-sm"
+                      title="Generate Barcode"
+                    >
+                      🔄 Generate
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-1">
+                  Rack Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full px-3 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md placeholder-gray-300"
+                  placeholder="Rack A1"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-1">
+                  Description
+                </label>
+                <textarea
+                  value={formData.description || ''}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  rows={2}
+                  className="w-full px-3 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md placeholder-gray-300"
+                  placeholder="Rack description..."
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-white mb-1">
+                    Rack Type *
+                  </label>
+                  <select
+                    required
+                    value={formData.rack_type}
+                    onChange={(e) => setFormData({ ...formData, rack_type: e.target.value as any })}
+                    className="w-full px-3 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md placeholder-gray-300"
+                  >
+                    <option className="bg-gray-800" value="box">Box</option>
+                    <option className="bg-gray-800" value="folder">Folder</option>
+                    <option className="bg-gray-800" value="drawer">Drawer</option>
+                    <option className="bg-gray-800" value="tray">Tray</option>
+                    <option className="bg-gray-800" value="bin">Bin</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-1">
+                    Position on Shelf *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.position}
+                    onChange={(e) => setFormData({ ...formData, position: e.target.value })}
+                    className="w-full px-3 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md placeholder-gray-300"
+                    placeholder="A1, B2, etc."
+                  />
+                </div>
+              </div>
+
+              {/* Capacity */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-white mb-1">
+                    Max Documents *
+                  </label>
+                  <input
+                    type="number"
+                    required
+                    min="1"
+                    value={formData.max_documents}
+                    onChange={(e) => setFormData({ ...formData, max_documents: parseInt(e.target.value) })}
+                    className="w-full px-3 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md placeholder-gray-300"
+                    placeholder="50"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white mb-1">
+                    Weight Capacity (kg) *
+                  </label>
+                  <input
+                    type="number"
+                    required
+                    min="0"
+                    step="0.1"
+                    value={formData.weight_capacity}
+                    onChange={(e) => setFormData({ ...formData, weight_capacity: parseFloat(e.target.value) })}
+                    className="w-full px-3 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md placeholder-gray-300"
+                    placeholder="50"
+                  />
+                </div>
+              </div>
+
+              {/* Dimensions */}
+              <div className="border-t border-white/20 pt-4">
+                <h4 className="text-sm font-medium text-white mb-3">Dimensions (cm)</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-1">
+                      Width *
+                    </label>
+                    <input
+                      type="number"
+                      required
+                      min="0"
+                      step="0.1"
+                      value={formData.dimensions.width}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        dimensions: { ...formData.dimensions, width: parseFloat(e.target.value) }
+                      })}
+                      className="w-full px-3 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md placeholder-gray-300"
+                      placeholder="40"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-1">
+                      Depth *
+                    </label>
+                    <input
+                      type="number"
+                      required
+                      min="0"
+                      step="0.1"
+                      value={formData.dimensions.depth}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        dimensions: { ...formData.dimensions, depth: parseFloat(e.target.value) }
+                      })}
+                      className="w-full px-3 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md placeholder-gray-300"
+                      placeholder="30"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-1">
+                      Height *
+                    </label>
+                    <input
+                      type="number"
+                      required
+                      min="0"
+                      step="0.1"
+                      value={formData.dimensions.height}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        dimensions: { ...formData.dimensions, height: parseFloat(e.target.value) }
+                      })}
+                      className="w-full px-3 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md placeholder-gray-300"
+                      placeholder="25"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Customer Assignment */}
+              <div className="border-t border-white/20 pt-4">
+                <h4 className="text-sm font-medium text-white mb-3">Customer Assignment</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-1">
+                      Assignment Type *
+                    </label>
+                    <select
+                      required
+                      value={formData.assignment_type}
+                      onChange={(e) => setFormData({ ...formData, assignment_type: e.target.value as any })}
+                      className="w-full px-3 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md placeholder-gray-300"
+                    >
+                      <option className="bg-gray-800" value="general">General (Available for any document)</option>
+                      <option className="bg-gray-800" value="customer_dedicated">Customer Dedicated</option>
+                      <option className="bg-gray-800" value="document_specific">Document Specific</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-white mb-1">
+                      Customer ID (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.customer_id || ''}
+                      onChange={(e) => setFormData({ ...formData, customer_id: e.target.value || undefined })}
+                      className="w-full px-3 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-white focus:ring-blue-400 focus:border-blue-400 rounded-md placeholder-gray-300"
+                      placeholder="Leave empty for general use"
+                      disabled={formData.assignment_type === 'general'}
+                    />
+                    <p className="mt-1 text-xs text-gray-300">
+                      Only applicable for customer dedicated racks
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-3 pt-4 border-t border-white/20">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowForm(false);
+                    resetForm();
+                  }}
+                  className="px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 text-gray-300 rounded-md hover:bg-white/20 hover:text-white transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-500/30 backdrop-blur-sm text-white border border-blue-400/50 rounded-md hover:bg-blue-500/50 transition-colors"
+                >
+                  {editingRack ? 'Update Rack' : 'Create Rack'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Racks Table */}
+      <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg overflow-hidden">
+        {loading ? (
+          <div className="p-8 text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-2 text-white">Loading racks...</p>
+          </div>
+        ) : filteredRacks.length === 0 ? (
+          <div className="p-8 text-center">
+            <p className="text-gray-300">No racks found</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-white/20">
+              <thead className="bg-white/10 backdrop-blur-md">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Code
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Shelf
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Barcode
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Position
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Type
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Documents
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Assignment
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white/5 divide-y divide-white/20">
+                {filteredRacks.map((rack) => (
+                  <tr key={rack.id} className="hover:bg-white/10">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                      {rack.code}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
+                      {rack.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                      {(rack as any).shelf_name || '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                      <span className="font-mono text-xs bg-blue-500/20 text-blue-200 px-2 py-1 rounded border border-blue-400/50">
+                        {rack.barcode}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                      <span className="font-semibold">{rack.position}</span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                      <span className="capitalize">{rack.rack_type}</span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <div className="flex items-center space-x-2">
+                        <span className={`font-medium ${getCapacityColor(rack)}`}>
+                          {rack.current_documents} / {rack.max_documents}
+                        </span>
+                        {getCapacityBadge(rack)}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        rack.assignment_type === 'customer_dedicated' ? 'bg-purple-500/30 text-purple-200 border border-purple-400/50' :
+                        rack.assignment_type === 'document_specific' ? 'bg-blue-500/30 text-blue-200 border border-blue-400/50' :
+                        'bg-gray-500/30 text-gray-200 border border-gray-400/50'
+                      }`}>
+                        {rack.assignment_type === 'customer_dedicated' ? 'Customer' :
+                         rack.assignment_type === 'document_specific' ? 'Specific' :
+                         'General'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        rack.status === 'active' ? 'bg-green-500/30 text-green-200 border border-green-400/50' :
+                        rack.status === 'inactive' ? 'bg-gray-500/30 text-gray-200 border border-gray-400/50' :
+                        'bg-yellow-500/30 text-yellow-200 border border-yellow-400/50'
+                      }`}>
+                        {rack.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => handleEdit(rack)}
+                          className="text-blue-400 hover:text-blue-300"
+                        >
+                          Edit
+                        </button>
+                        {onRackSelected && (
+                          <button
+                            onClick={() => onRackSelected(rack)}
+                            className="text-green-400 hover:text-green-300"
+                          >
+                            Select
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default RackManagement;

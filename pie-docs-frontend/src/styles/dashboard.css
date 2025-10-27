@@ -1,0 +1,384 @@
+/* Dashboard Grid Layout */
+.dashboard-grid {
+  display: grid;
+  gap: 1.5rem;
+
+  /* Mobile-first: Single column stack */
+  grid-template-columns: 1fr;
+  grid-auto-rows: minmax(200px, auto);
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop: 4 columns */
+@media (min-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(150px, auto);
+  }
+}
+
+/* Extra large screens: 6 columns for more flexibility */
+@media (min-width: 1536px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* Widget size variants - these classes are applied by WidgetContainer */
+.widget-small {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.widget-medium {
+  grid-column: span 1;
+  grid-row: span 2;
+}
+
+@media (min-width: 768px) {
+  .widget-medium {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+}
+
+.widget-large {
+  grid-column: span 1;
+  grid-row: span 2;
+}
+
+@media (min-width: 768px) {
+  .widget-large {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+}
+
+.widget-wide {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+@media (min-width: 768px) {
+  .widget-wide {
+    grid-column: span 4;
+    grid-row: span 1;
+  }
+}
+
+@media (min-width: 1536px) {
+  .widget-wide {
+    grid-column: span 6;
+  }
+}
+
+/* Drag and drop states */
+.widget-dragging {
+  opacity: 0.5;
+  transform: rotate(5deg);
+  z-index: 1000;
+}
+
+.widget-drop-zone {
+  border: 2px dashed #3b82f6;
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+.widget-drop-zone-active {
+  border-color: #10b981;
+  background-color: rgba(16, 185, 129, 0.1);
+}
+
+/* Animation for layout changes */
+.dashboard-grid .widget-container {
+  transition: all 0.3s ease-in-out;
+}
+
+/* RTL support */
+[dir="rtl"] .dashboard-grid {
+  direction: rtl;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .dashboard-grid .widget-container {
+    border: 2px solid currentColor;
+  }
+
+  .widget-drop-zone {
+    border: 3px dashed currentColor;
+  }
+}
+
+/* Skeleton loading animations */
+.skeleton-pulse {
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Shimmer effect for better loading experience */
+.skeleton-shimmer {
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.4) 50%,
+    rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Dark mode skeleton colors */
+@media (prefers-color-scheme: dark) {
+  .skeleton-shimmer {
+    background: linear-gradient(90deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.1) 50%,
+      rgba(255,255,255,0) 100%);
+  }
+}
+
+/* Widget loading states */
+.widget-loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.widget-loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,255,255,0.4) 50%,
+    transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  pointer-events: none;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-grid .widget-container {
+    transition: none;
+  }
+
+  .widget-dragging {
+    transform: none;
+  }
+
+  .skeleton-pulse,
+  .skeleton-shimmer,
+  .widget-loading::after {
+    animation: none;
+  }
+}
+
+/* React Grid Layout Styles */
+.react-grid-layout {
+  position: relative;
+}
+
+.react-grid-item {
+  transition: all 200ms ease;
+  transition-property: left, top;
+  border: 1px solid transparent;
+}
+
+.react-grid-item img {
+  pointer-events: none;
+  user-select: none;
+}
+
+.react-grid-item.cssTransforms {
+  transition-property: transform;
+}
+
+.react-grid-item.resizing {
+  z-index: 1;
+  will-change: width, height;
+}
+
+.react-grid-item.react-draggable-dragging {
+  transition: none;
+  z-index: 3;
+  will-change: transform;
+}
+
+.react-grid-item.dropping {
+  visibility: hidden;
+}
+
+.react-grid-item.react-grid-placeholder {
+  background: rgb(59 130 246 / 0.2);
+  opacity: 0.2;
+  transition-duration: 100ms;
+  z-index: 2;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  border: 2px dashed rgb(59 130 246 / 0.5);
+  border-radius: 8px;
+}
+
+.react-grid-item.react-grid-placeholder.placeholder-active {
+  background: rgb(16 185 129 / 0.3);
+  border-color: rgb(16 185 129 / 0.7);
+}
+
+.react-grid-item > .react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNiIgaGVpZ2h0PSI2IiB2aWV3Qm94PSIwIDAgNiA2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZG90IGN4PSIxIiBjeT0iMSIgcj0iMSIgZmlsbD0iIzk5OTk5OSIvPgo8ZG90IGN4PSIxIiBjeT0iMyIgcj0iMSIgZmlsbD0iIzk5OTk5OSIvPgo8ZG90IGN4PSIxIiBjeT0iNSIgcj0iMSIgZmlsbD0iIzk5OTk5OSIvPgo8ZG90IGN4PSIzIiBjeT0iMyIgcj0iMSIgZmlsbD0iIzk5OTk5OSIvPgo8ZG90IGN4PSIzIiBjeT0iNSIgcj0iMSIgZmlsbD0iIzk5OTk5OSIvPgo8ZG90IGN4PSI1IiBjeT0iNSIgcj0iMSIgZmlsbD0iIzk5OTk5OSIvPgo8L3N2Zz4K');
+  background-position: bottom right;
+  padding: 0 3px 3px 0;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  box-sizing: border-box;
+  cursor: se-resize;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.react-grid-item:hover > .react-resizable-handle {
+  opacity: 1;
+}
+
+.react-grid-item > .react-resizable-handle::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-right: 2px solid rgba(0, 0, 0, 0.4);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.4);
+}
+
+/* Dark mode support for react-grid-layout */
+.dark .react-grid-item.react-grid-placeholder {
+  background: rgb(59 130 246 / 0.3);
+  border-color: rgb(59 130 246 / 0.6);
+}
+
+.dark .react-grid-item.react-grid-placeholder.placeholder-active {
+  background: rgb(16 185 129 / 0.4);
+  border-color: rgb(16 185 129 / 0.8);
+}
+
+.dark .react-grid-item > .react-resizable-handle::after {
+  border-right-color: rgba(255, 255, 255, 0.6);
+  border-bottom-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Grid container styling */
+.react-grid-layout {
+  background-color: transparent;
+  min-height: 400px;
+}
+
+.react-grid-layout.layout {
+  padding: 0;
+  margin: 0;
+}
+
+/* Dashboard builder specific styles */
+.dashboard-builder .react-grid-layout {
+  border: 1px dashed rgb(209 213 219 / 0.5);
+  border-radius: 12px;
+  min-height: 600px;
+  background-color: rgb(249 250 251 / 0.5);
+  background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,.15) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+.dark .dashboard-builder .react-grid-layout {
+  border-color: rgb(75 85 99 / 0.5);
+  background-color: rgb(17 24 39 / 0.5);
+  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,.1) 1px, transparent 0);
+}
+
+/* Widget container in grid layout */
+.react-grid-item .widget-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  transition: box-shadow 0.2s ease;
+}
+
+.react-grid-item:hover .widget-container {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.react-grid-item.react-draggable-dragging .widget-container {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  transform: rotate(2deg);
+}
+
+/* Preview mode */
+.preview-mode .react-grid-item > .react-resizable-handle {
+  display: none !important;
+}
+
+.preview-mode .react-grid-item {
+  cursor: default !important;
+}
+
+.preview-mode .react-grid-layout {
+  border: none;
+  background: transparent;
+}
+
+/* RTL support for grid layout */
+[dir="rtl"] .react-grid-item > .react-resizable-handle {
+  right: auto;
+  left: 0;
+  background-position: bottom left;
+  cursor: sw-resize;
+}
+
+[dir="rtl"] .react-grid-item > .react-resizable-handle::after {
+  right: auto;
+  left: 3px;
+  border-right: none;
+  border-left: 2px solid rgba(0, 0, 0, 0.4);
+}
+
+[dir="rtl"] .dark .react-grid-item > .react-resizable-handle::after {
+  border-left-color: rgba(255, 255, 255, 0.6);
+  border-right: none;
+}

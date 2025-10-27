@@ -1,0 +1,53 @@
+{
+  "language": "Language",
+  "english": "English",
+  "arabic": "العربية",
+  "loading": "Loading...",
+  "error": "Error",
+  "success": "Success",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "add": "Add",
+  "close": "Close",
+  "retry": "Retry",
+  "back": "Back",
+  "next": "Next",
+  "previous": "Previous",
+  "of": "of",
+  "submit": "Submit",
+  "reset": "Reset",
+  "search": "Search",
+  "filter": "Filter",
+  "sort": "Sort",
+  "actions": "Actions",
+  "settings": "Settings",
+  "profile": "Profile",
+  "logout": "Logout",
+  "login": "Login",
+  "home": "Home",
+  "dashboard": "Dashboard",
+  "navigation": {
+    "main": "Main Navigation",
+    "skipToContent": "Skip to main content"
+  },
+  "header": {
+    "appName": "PIE DOCS",
+    "openSidebar": "Open sidebar",
+    "closeSidebar": "Close sidebar",
+    "user": "User",
+    "role": "Role",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "errors": {
+    "pageNotFound": "Page not found",
+    "unauthorized": "Unauthorized access",
+    "forbidden": "Access forbidden",
+    "serverError": "Internal server error",
+    "networkError": "Network connection error"
+  }
+}
