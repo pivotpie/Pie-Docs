@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: piedocs-postgres
+    ports:
+      - "5434:5432"  # External:Internal - avoids conflict with Mayan (5432) and PG18 (5433)
+    environment:
+      POSTGRES_DB: piedocs
+      POSTGRES_USER: piedocs
+      POSTGRES_PASSWORD: piedocs123
+    volumes:
+      - piedocs-data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U piedocs"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - piedocs-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: piedocs-pgadmin
+    ports:
+      - "5050:80"  # Access pgAdmin at http://localhost:5050
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    restart: unless-stopped
+    depends_on:
+      - db
+    networks:
+      - piedocs-network
+
+networks:
+  piedocs-network:
+    driver: bridge
+
+volumes:
+  piedocs-data:
+    name: piedocs-postgres-data
+  pgadmin-data:
+    name: piedocs-pgadmin-data

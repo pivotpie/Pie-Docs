@@ -1,0 +1,15 @@
+# Development override for Docker Compose
+# This file mounts local source code into containers for development
+
+services:
+  app:
+    # Mount local source code into container for live editing
+    volumes:
+      - ${MAYAN_APP_VOLUME:-app}:/var/lib/mayan
+      - ../mayan:/opt/mayan-edms/lib/python3.9/site-packages/mayan
+    # Use development-friendly port
+    ports:
+      - "8080:8000"
+    # Enable debugging
+    environment:
+      MAYAN_DEBUG: 'True'

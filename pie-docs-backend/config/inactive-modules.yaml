@@ -1,0 +1,92 @@
+# ============================================================
+# INACTIVE/DEPRECATED MODULES CONFIGURATION
+# ============================================================
+# This file marks modules that are inactive, deprecated, or superseded
+# by newer implementations. It serves as guidance for:
+# - AI assistants (to avoid generating code for deprecated modules)
+# - Developers (to understand which modules to avoid/migrate from)
+# - Documentation (to track technical debt and migration paths)
+#
+# Status Definitions:
+# - inactive: Module exists but should not be used for new features
+# - deprecated: Module is marked for removal in future versions
+# - superseded: Module replaced by a better alternative
+# ============================================================
+
+version: "1.0"
+updated: "2025-10-10"
+
+inactive_modules:
+  # Cabinets Module
+  - module: "cabinets"
+    router_path: "app/routers/cabinets.py"
+    swagger_tag: "cabinets"
+    status: "inactive"
+    reason: "Replaced by folders system"
+    alternative: "folders"
+    alternative_router: "app/routers/folders.py"
+    hidden_from_swagger: true
+    endpoints_still_functional: true
+    migration_notes: |
+      The cabinets module provided basic document organization similar to
+      physical filing cabinets. This functionality has been superseded by
+      the folders system which provides:
+      - Hierarchical folder structure
+      - Better document organization
+      - Simpler user experience
+      - Standard folder-based navigation
+    recommended_action: "Use folders endpoints for all document organization"
+
+  # Physical Locations Module
+  - module: "physical_locations"
+    router_path: "app/routers/physical_locations.py"
+    swagger_tag: "physical-locations"
+    status: "inactive"
+    reason: "Replaced by warehouse location management"
+    alternative: "warehouse"
+    alternative_router: "app/routers/warehouse.py"
+    hidden_from_swagger: true
+    endpoints_still_functional: true
+    migration_notes: |
+      The physical_locations module provided generic storage location tracking.
+      This has been replaced by the warehouse system which offers:
+      - Hierarchical warehouse structure
+      - Better utilization tracking
+      - Integration with physical document scanning
+      - Movement history and audit trails
+      - Zone and rack-level organization
+    recommended_action: "Use warehouse location endpoints instead"
+
+# AI Assistant Instructions
+ai_instructions: |
+  When a user requests features related to:
+  - Cabinets, document filing, or cabinet organization → Use 'folders' module
+  - Physical locations, storage tracking → Use 'warehouse' module
+
+  DO NOT generate new code for inactive modules.
+  DO NOT suggest using inactive modules for new features.
+  DO suggest migration from inactive to active modules when appropriate.
+
+  If asked to fix bugs in inactive modules, you may do so, but recommend
+  migrating to the active alternative.
+
+# Developer Guidelines
+developer_guidelines: |
+  1. Do not add new features to inactive modules
+  2. New code should use the 'alternative' module specified above
+  3. Existing endpoints remain functional for backward compatibility
+  4. Plan migration of existing functionality to active modules
+  5. Document any blockers preventing full deprecation
+
+# Migration Checklist
+migration_checklist:
+  - item: "Identify all frontend code using inactive cabinet endpoints"
+    status: "pending"
+  - item: "Create data migration script from cabinets to warehouse"
+    status: "pending"
+  - item: "Update API documentation to reflect warehouse as primary"
+    status: "pending"
+  - item: "Add deprecation warnings to inactive endpoint responses"
+    status: "pending"
+  - item: "Set sunset date for inactive endpoints"
+    status: "pending"

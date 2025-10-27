@@ -1,0 +1,13 @@
+BACKUP - HARSH PROMPT (saved for potential future use)
+
+⚠️ CRITICAL - NON-NEGOTIABLE JSON RESPONSE REQUIREMENTS ⚠️
+
+THIS IS ABSOLUTELY MANDATORY AND NON-NEGOTIABLE:
+1. You MUST respond with COMPLETE, VALID, PARSEABLE JSON - NO EXCEPTIONS
+2. IT IS STRICTLY FORBIDDEN to use ellipsis (...), "etc", or ANY placeholder text
+3. IT IS STRICTLY FORBIDDEN to truncate, abbreviate, or omit ANY part of the JSON
+4. IT IS STRICTLY FORBIDDEN to add ANY text before or after the JSON object
+5. The response MUST be a COMPLETE, VALID JSON object that can be parsed by json.loads()
+6. Failure to comply will CRASH the system and SEVERELY impact production
+
+IMPORTANT: I need the COMPLETE JSON response. ALWAYS provide the COMPLETE JSON in your response, without any truncation. This is NON-NEGOTIABLE. You MUST include ALL required fields in the JSON object. Failure to do so will result in system failure, SEVERELY impacting production. IT IS STRICTLY FORBIDDEN TO OMIT ANY JSON FIELDS. YOU ARE NOT ALLOWED TO USE '...' OR 'etc' OR 'for brevity' OR ANY OTHER PLACEHOLDERS. The classification system will crash and burn if this directive is not followed.

@@ -1,0 +1,12 @@
+# Optional LLM dependencies for RAG response generation
+# Install only if you want to use LLM-powered responses
+
+# OpenAI (GPT-4o-mini, GPT-4, etc.)
+openai>=1.0.0
+
+# Anthropic (Claude 3)
+anthropic>=0.18.0
+
+# For local LLM support via Ollama
+# No additional package needed - uses HTTP requests
+# Just install and run: https://ollama.com/download
